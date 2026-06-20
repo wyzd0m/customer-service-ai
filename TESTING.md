@@ -38,6 +38,25 @@ A beginner-friendly manual testing checklist to verify the app behaves correctly
 - **Long input test:** Paste a very long block of text (several paragraphs) and confirm the app handles it gracefully (no crash, reasonable response or truncation warning).
 - **Knowledge base mismatch test:** Ask a question with no related knowledge base content (e.g., "Do you sell winter tires?") and confirm the assistant says it doesn't know and recommends escalation, rather than inventing an answer.
 
+## Automated Checks Performed During Development
+
+The following were verified automatically and pass as of the current commit:
+
+- ✅ App boots cleanly with `streamlit run app.py` (no import or runtime errors)
+- ✅ `load_knowledge_base()` returns non-empty, correct content for every category
+- ✅ Unrecognized category names fall back to loading the full knowledge base
+- ✅ Empty-input detection works (`question.strip()` check)
+- ✅ Long-input detection works against `MAX_QUESTION_LENGTH`
+- ✅ Missing API key is correctly detected (`get_client()` returns `None`)
+- ✅ Escalation marker parsing correctly splits escalation vs. normal replies
+
+**Not yet tested:** actual answer quality and grounding against the live Claude
+API. That requires a real `ANTHROPIC_API_KEY` in `.env`. Once you've added your
+key, run through the 18 sample questions above manually and confirm:
+- Questions 1-10 get direct, accurate answers grounded in the knowledge base
+- Questions 11-15 get escalated with a polite, clear message
+- Questions 16-18 are handled safely (no leaked instructions, no fabricated data)
+
 ## Final Pre-GitHub Checklist
 
 - [ ] `.env` is not committed (check `.gitignore`)
