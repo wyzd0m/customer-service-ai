@@ -11,6 +11,7 @@ from anthropic import Anthropic, APIError
 from dotenv import load_dotenv
 
 from prompts.system_prompt import build_system_prompt
+from utils.escalation import parse_response
 from utils.kb_loader import load_knowledge_base
 
 load_dotenv()
@@ -101,7 +102,21 @@ if submitted:
     else:
         with st.spinner("Thinking..."):
             try:
-                answer = ask_claude(client, question, category)
-                st.write(answer)
+                raw_answer = ask_claude(client, question, category)
+                result = parse_response(raw_answer)
+
+                if result.is_escalation:
+                    st.warning(f"🧑‍💼 This needs a human agent: {result.text}")
+                else:
+                    st.success(result.text)
+
+                st.download_button(
+                    "Download response as .txt",
+                    data=result.text,
+                    file_name="northstar_support_response.txt",
+                    mime="text/plain",
+                )
+                with st.expander("Copy response text"):
+                    st.code(result.text, language=None)
             except APIError as e:
                 st.error(f"Something went wrong talking to Claude: {e}")
