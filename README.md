@@ -15,6 +15,9 @@ Customer Service AI is a web app that simulates a support assistant for a fictio
 - Detects when a question should be escalated to a human agent and says so
 - Lets the user copy or download the generated response
 
+<img width="864" height="918" alt="image" src="https://github.com/user-attachments/assets/de735a3b-67ac-4033-8a4d-4fe81cfb4fe4" />
+
+
 ## Why This Project Exists
 
 This project was built to demonstrate practical skills in:
